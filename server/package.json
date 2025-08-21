@@ -1,0 +1,37 @@
+{
+  "name": "server-api",
+  "version": "1.0.0",
+  "description": "GraphQL server providing all dashbord metrics",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production PORT=4000 pm2 start index.js --name \"server-api\"",
+    "start:internal": "cross-env NODE_ENV=production PORT=4001 SHOW_ALL_CONTAINERS=true pm2 start index.js --name \"server-api-internal\"",
+    "restart": "pm2 restart server-api",
+    "restart:internal": "pm2 restart server-api-internal",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "Elton Lucien",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "apollo-server-express": "^3.13.0",
+    "axios": "^1.11.0",
+    "child-process": "^1.0.2",
+    "dotenv": "^18.0.4",
+    "express": "^4.17.1",
+    "graphql": "^16.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.1",
+    "node-cron": "^4.2.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.34.0",
+    "cross-env": "^10.0.0",
+    "eslint": "^9.34.0",
+    "eslint-plugin-import": "^2.32.0",
+    "globals": "^16.3.0",
+    "nodemon": "^3.1.10"
+  }
+}

@@ -1,0 +1,79 @@
+type Container {
+  name: String
+  image: String
+  status: String
+  online: Boolean
+  ports: [Int]
+  network: String
+  ip: String
+}
+
+type PiHoleSummary {
+  totalQueries: Int
+  blocked: Int
+  percentBlocked: Float
+  activeClients: Int
+  gravitySize: Int
+  topDomain: String
+  topBlocked: String
+  topClient: String
+}
+
+type TimeSeriesPoint {
+  time: String
+  value: Float
+}
+
+type Network {
+  downloadHistory: [TimeSeriesPoint]
+  uploadHistory: [TimeSeriesPoint]
+}
+
+type Cpu {
+  load: Float
+  usage: String
+  temperature: String
+  cpuHistory: [TimeSeriesPoint]
+}
+
+type Memory {
+  totalMB: Int
+  freeMB: Int
+  usedMB: Int
+  usagePercent: String
+}
+
+type Disk {
+  name: String
+  total: Float
+  free: Float
+  used: Float
+  usagePercent: String
+  isMainDisk: Boolean
+}
+
+type Uptime {
+  seconds: Int
+  hours: String
+  days: String
+}
+
+type System {
+  cpu: Cpu
+  memory: Memory
+  disks: [Disk]
+  uptime: Uptime
+  network: Network
+}
+
+type JellyfinLibrary {
+  name: String
+  count: Int
+}
+
+type Query {
+  containers: [Container]
+  piholeSummary: PiHoleSummary
+  system: System
+  jellyfin: [JellyfinLibrary]
+}

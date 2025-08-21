@@ -1,0 +1,65 @@
+query dashboardSummary {
+  containers {
+    name
+    image
+    status
+    online
+    ports
+    network
+    ip
+  }
+  piholeSummary {
+    activeClients
+    blocked
+    gravitySize
+    percentBlocked
+    topBlocked
+    topClient
+    topDomain
+    totalQueries
+  }
+  jellyfin {
+    count
+    name
+  }
+  system {
+    cpu {
+      load
+      usage
+      temperature
+      cpuHistory {
+        time
+        value
+      }
+    }
+    memory {
+      totalMB
+      freeMB
+      usedMB
+      usagePercent
+    }
+    disks {
+      name
+      total
+      free
+      used
+      usagePercent
+      isMainDisk
+    }
+    uptime {
+      seconds
+      hours
+      days
+    }
+    network {
+      downloadHistory {
+        time
+        value
+      }
+      uploadHistory {
+        time
+        value
+      }
+    }
+  }
+}

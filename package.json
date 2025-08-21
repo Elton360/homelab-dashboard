@@ -1,0 +1,21 @@
+{
+  "name": "homelab-dashboard",
+  "version": "1.0.0",
+  "description": "Server Dashboard",
+  "homepage": "https://github.com/Elton360/homelab-dashboard#readme",
+  "bugs": {
+    "url": "https://github.com/Elton360/homelab-dashboard/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elton360/homelab-dashboard.git"
+  },
+  "license": "ISC",
+  "author": "Elton Lucien",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}
