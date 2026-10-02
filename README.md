@@ -2,6 +2,8 @@
 
 A single-page dashboard for my home server. It shows system health and the status of the self-hosted services running on it, and links to each of them.
 
+Live at **adzvitalis.us** (public build, server on port 4000). The private dashboard with the internal services is a separate private repo behind authentication; it uses its own ports (4002/4003), pm2 names and web roots so both can run on the same server.
+
 ## Features
 
 - **System metrics** from Prometheus / node_exporter: CPU usage and temperature, memory, disk usage per mount, uptime, and CPU and network history charts
@@ -56,6 +58,10 @@ The server runs under [pm2](https://pm2.keymetrics.io/):
 npm start                # public instance on port 4000
 npm run start:internal   # internal instance on port 4001
 ```
+
+In production only the public instance is used. The private dashboard replaced the internal instance, and no nginx site points at port 4001 or `/var/www/server-landing-internal`.
+
+`server/.env` is gitignored, so create it on each machine. The server throws `Environment variable ... is not defined` at startup if it's missing.
 
 For the client, copy `client/.env.example` to `.env.production.local` and set your URLs. Then run `npm run build`. The build script copies `dist/` to `/var/www/server-landing`, so change that path to suit your web server.
 
