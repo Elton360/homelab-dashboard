@@ -101,7 +101,7 @@ export const makeServicesConfig = (data) => {
     {
       id: 'jellyfin',
       title: 'Jellyfin',
-      description: 'Media Server: Anime, Cartoons, Movies, Shows etc.',
+      description: 'Personal media streaming',
       icon: <JellyfinIcon />,
       href: JELLYFIN_URL,
       grid: { column: '9 / span 4', row: '3' },
