@@ -15,6 +15,10 @@ import {
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const IS_INTERNAL_BUILD = import.meta.env.MODE === 'internal'
 
+// noah.attlocal.net -> noah; IP addresses are left as they are
+const shortHostname = (name) =>
+  name && !/^[\d.]+$/.test(name) ? name.split('.')[0] : name
+
 // Only Jellyfin is exposed as an external link on the public dashboard
 const JELLYFIN_URL = `${BASE_URL}/jellyfin`
 
@@ -66,7 +70,11 @@ export const makeServicesConfig = (data) => {
         ...(IS_INTERNAL_BUILD
           ? [
               { label: 'Top Blocked', value: pihole.topBlocked || '-' },
-              { label: 'Top Client', value: pihole.topClient || '-' },
+              {
+                label: 'Top Client',
+                value: pihole.topClient || '-',
+                display: shortHostname(pihole.topClient),
+              },
             ]
           : []),
       ],

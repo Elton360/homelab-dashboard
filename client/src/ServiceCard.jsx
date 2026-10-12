@@ -123,12 +123,15 @@ const ServiceCard = ({ service, isDisabled }) => {
         {online && <StatusDot color="#00e676" />}
       </div>
       <div className="bottom-stats">
-        {stats.map(({ label, value }, i) => {
+        {stats.map(({ label, value, display }, i) => {
           const regex = /(?:[a-zA-Z0-9-]+\.)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})/
           const match = `${value}`.match(regex)
 
+          // `display` overrides the default domain shortening below
           let displayName = ''
-          if (match) {
+          if (display != null) {
+            displayName = display
+          } else if (match) {
             const domainParts = `${value}`.split('.')
             displayName = firstUppercase(domainParts[domainParts.length - 2])
           } else {
