@@ -48,14 +48,18 @@ export const makeServicesConfig = (data) => {
     {
       id: 'pihole',
       title: 'Pi-Hole',
-      description: 'Network-wide ad blocking',
+      description: 'Ad blocking DNS',
       icon: <PiholeIcon />,
       grid: { column: '1 / span 4', row: '1' },
       stats: [
-        { label: 'Total Queries', value: pihole.totalQueries || 0 },
+        // '-' rather than 0 when Pi-hole couldn't be read
+        { label: 'Total Queries', value: pihole.totalQueries ?? '-' },
         {
           label: 'Percent Blocked',
-          value: Math.round(pihole.percentBlocked) || 0,
+          value:
+            pihole.percentBlocked == null
+              ? '-'
+              : Math.round(pihole.percentBlocked),
         },
         { label: 'Top Blocked', value: pihole.topBlocked || '-' },
         { label: 'Top Client', value: pihole.topClient || '-' },

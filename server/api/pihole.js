@@ -15,6 +15,10 @@ let loginPromise = null
 
 async function login() {
   const { data } = await piholeApi.post('/auth', { password: PIHOLE_PASSWORD })
+  // A wrong password still answers 200, with valid: false
+  if (!data.session?.valid) {
+    throw new Error(`Pi-hole login failed: ${data.session?.message}`)
+  }
   const { sid, validity } = data.session
   piholeSession = { sid, expiresAt: nowInSeconds() + validity }
 }
@@ -62,7 +66,7 @@ export async function getPiholeSummary() {
     const [topDomains, topBlocked, topClients] = await Promise.allSettled([
       piholeGet('/stats/top_domains', { count: 1 }),
       piholeGet('/stats/top_domains', { blocked: true, count: 1 }),
-      piholeGet('/stats/top_clients', { blocked: true, count: 1 }),
+      piholeGet('/stats/top_clients', { count: 1 }),
     ])
     const topClient = topEntry(topClients.value?.clients)
 
