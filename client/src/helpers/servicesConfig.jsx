@@ -73,21 +73,11 @@ export const makeServicesConfig = (data) => {
       online: onlineContainerIds.has('pihole'),
     },
     {
-      id: 'jellyfin',
-      title: 'Jellyfin',
-      description: 'Media Server: Anime, Cartoons, Movies, Shows etc.',
-      icon: <JellyfinIcon />,
-      href: JELLYFIN_URL,
-      grid: { column: '1 / span 4', row: '3' },
-      stats: jellyfin.map(({ count, name }) => ({ label: name, value: count })),
-      online: onlineContainerIds.has('jellyfin'),
-    },
-    {
       id: 'immich',
       title: 'Immich',
       description: 'Photo and Video Backup Solution',
       icon: <ImmichIcon />,
-      grid: { column: '5 / span 4', row: '3' },
+      grid: { column: '1 / span 4', row: '3' },
       stats: [],
       online: onlineContainerIds.has('immich_server'),
     },
@@ -96,9 +86,22 @@ export const makeServicesConfig = (data) => {
       title: 'Nextcloud',
       description: 'Self-hosted file sync and share',
       icon: <NextcloudIcon />,
-      grid: { column: '9 / span 4', row: '3' },
+      grid: { column: '5 / span 4', row: '3' },
       stats: [],
       online: onlineContainerIds.has('nextcloud'),
+    },
+    {
+      id: 'jellyfin',
+      title: 'Jellyfin',
+      description: 'Media Server: Anime, Cartoons, Movies, Shows etc.',
+      icon: <JellyfinIcon />,
+      href: JELLYFIN_URL,
+      grid: { column: '9 / span 4', row: '3' },
+      // Library counts only on the internal dashboard
+      stats: IS_INTERNAL_BUILD
+        ? jellyfin.map(({ count, name }) => ({ label: name, value: count }))
+        : [],
+      online: onlineContainerIds.has('jellyfin'),
     },
     {
       id: 'alerts',
