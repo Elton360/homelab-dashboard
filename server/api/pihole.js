@@ -1,7 +1,11 @@
 import axios from 'axios'
 
 import { nowInSeconds } from '../helpers/conversion.js'
-import { PIHOLE_API_URL, PIHOLE_PASSWORD } from '../helpers/env.js'
+import {
+  IS_INTERNAL_INSTANCE,
+  PIHOLE_API_URL,
+  PIHOLE_PASSWORD,
+} from '../helpers/env.js'
 
 // Pi-hole v6 API. Any failure resolves to null so an unreachable or
 // misconfigured Pi-hole never breaks the rest of the dashboard
@@ -61,6 +65,16 @@ export async function getPiholeSummary() {
 
   try {
     const summary = await piholeGet('/stats/summary')
+    const totals = {
+      totalQueries: summary.queries?.total ?? null,
+      blocked: summary.queries?.blocked ?? null,
+      percentBlocked: summary.queries?.percent_blocked ?? null,
+      activeClients: summary.clients?.active ?? null,
+      gravitySize: summary.gravity?.domains_being_blocked ?? null,
+    }
+    // Top domains and clients reveal browsing and device names, so the public
+    // instance doesn't serve them (its GraphQL endpoint is reachable directly)
+    if (!IS_INTERNAL_INSTANCE) return totals
 
     // The top lists are extras: if one fails, still show the summary
     const [topDomains, topBlocked, topClients] = await Promise.allSettled([
@@ -71,11 +85,7 @@ export async function getPiholeSummary() {
     const topClient = topEntry(topClients.value?.clients)
 
     return {
-      totalQueries: summary.queries?.total ?? null,
-      blocked: summary.queries?.blocked ?? null,
-      percentBlocked: summary.queries?.percent_blocked ?? null,
-      activeClients: summary.clients?.active ?? null,
-      gravitySize: summary.gravity?.domains_being_blocked ?? null,
+      ...totals,
       topDomain: topEntry(topDomains.value?.domains)?.domain ?? null,
       topBlocked: topEntry(topBlocked.value?.domains)?.domain ?? null,
       topClient: topClient?.name || topClient?.ip || null,

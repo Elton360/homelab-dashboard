@@ -13,6 +13,7 @@ import {
 } from '../icons/Icons.jsx'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
+const IS_INTERNAL_BUILD = import.meta.env.MODE === 'internal'
 
 // Only Jellyfin is exposed as an external link on the public dashboard
 const JELLYFIN_URL = `${BASE_URL}/jellyfin`
@@ -61,8 +62,13 @@ export const makeServicesConfig = (data) => {
               ? '-'
               : Math.round(pihole.percentBlocked),
         },
-        { label: 'Top Blocked', value: pihole.topBlocked || '-' },
-        { label: 'Top Client', value: pihole.topClient || '-' },
+        // Per-device details stay off the public dashboard
+        ...(IS_INTERNAL_BUILD
+          ? [
+              { label: 'Top Blocked', value: pihole.topBlocked || '-' },
+              { label: 'Top Client', value: pihole.topClient || '-' },
+            ]
+          : []),
       ],
       online: onlineContainerIds.has('pihole'),
     },

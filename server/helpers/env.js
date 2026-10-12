@@ -40,3 +40,7 @@ export const CONTAINER_ALLOWLIST = getEnvVar('CONTAINER_ALLOWLIST', '')
   .filter(Boolean)
 export const SHOW_ALL_CONTAINERS =
   getEnvVar('SHOW_ALL_CONTAINERS', 'false') === 'true'
+
+// SHOW_ALL_CONTAINERS also marks the internal instance, the only one that
+// serves per-device details such as Pi-hole's top client and domains
+export const IS_INTERNAL_INSTANCE = SHOW_ALL_CONTAINERS
