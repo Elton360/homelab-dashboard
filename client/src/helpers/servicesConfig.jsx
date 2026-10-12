@@ -13,6 +13,7 @@ import {
 } from '../icons/Icons.jsx'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
+const IS_INTERNAL_BUILD = import.meta.env.MODE === 'internal'
 
 // Only Jellyfin is exposed as an external link on the public dashboard
 const JELLYFIN_URL = `${BASE_URL}/jellyfin`
@@ -61,27 +62,22 @@ export const makeServicesConfig = (data) => {
               ? '-'
               : Math.round(pihole.percentBlocked),
         },
-        { label: 'Top Blocked', value: pihole.topBlocked || '-' },
-        { label: 'Top Client', value: pihole.topClient || '-' },
+        // Per-device details stay off the public dashboard
+        ...(IS_INTERNAL_BUILD
+          ? [
+              { label: 'Top Blocked', value: pihole.topBlocked || '-' },
+              { label: 'Top Client', value: pihole.topClient || '-' },
+            ]
+          : []),
       ],
       online: onlineContainerIds.has('pihole'),
-    },
-    {
-      id: 'jellyfin',
-      title: 'Jellyfin',
-      description: 'Media Server: Anime, Cartoons, Movies, Shows etc.',
-      icon: <JellyfinIcon />,
-      href: JELLYFIN_URL,
-      grid: { column: '1 / span 4', row: '3' },
-      stats: jellyfin.map(({ count, name }) => ({ label: name, value: count })),
-      online: onlineContainerIds.has('jellyfin'),
     },
     {
       id: 'immich',
       title: 'Immich',
       description: 'Photo and Video Backup Solution',
       icon: <ImmichIcon />,
-      grid: { column: '5 / span 4', row: '3' },
+      grid: { column: '1 / span 4', row: '3' },
       stats: [],
       online: onlineContainerIds.has('immich_server'),
     },
@@ -90,9 +86,22 @@ export const makeServicesConfig = (data) => {
       title: 'Nextcloud',
       description: 'Self-hosted file sync and share',
       icon: <NextcloudIcon />,
-      grid: { column: '9 / span 4', row: '3' },
+      grid: { column: '5 / span 4', row: '3' },
       stats: [],
       online: onlineContainerIds.has('nextcloud'),
+    },
+    {
+      id: 'jellyfin',
+      title: 'Jellyfin',
+      description: 'Media Server: Anime, Cartoons, Movies, Shows etc.',
+      icon: <JellyfinIcon />,
+      href: JELLYFIN_URL,
+      grid: { column: '9 / span 4', row: '3' },
+      // Library counts only on the internal dashboard
+      stats: IS_INTERNAL_BUILD
+        ? jellyfin.map(({ count, name }) => ({ label: name, value: count }))
+        : [],
+      online: onlineContainerIds.has('jellyfin'),
     },
     {
       id: 'alerts',
