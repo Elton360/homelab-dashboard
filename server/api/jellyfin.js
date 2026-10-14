@@ -6,6 +6,13 @@ import {
   JELLYFIN_USERNAME,
 } from '../helpers/env.js'
 
+// Standard Authorization header. Jellyfin 12 disables the legacy
+// X-Emby-Authorization header; this one works on 10.11 as well
+const CLIENT_INFO =
+  'Client="Home-Server", Device="YourDevice", DeviceId="home-lab-708", Version="1.0.0"'
+const authHeader = (token) =>
+  `MediaBrowser ${CLIENT_INFO}${token ? `, Token="${token}"` : ''}`
+
 async function getJellyfinToken(jellyfinServerUrl, username, password) {
   try {
     const response = await axios.post(
@@ -16,10 +23,7 @@ async function getJellyfinToken(jellyfinServerUrl, username, password) {
         Password: password,
       },
       {
-        headers: {
-          'X-Emby-Authorization':
-            'MediaBrowser Client="Home-Server", Device="YourDevice", DeviceId="home-lab-708", Version="1.0.0"',
-        },
+        headers: { Authorization: authHeader() },
       },
     )
 
@@ -71,7 +75,7 @@ async function makeAuthenticatedRequest(
 
   const headers = {
     'Content-Type': 'application/json',
-    'X-Emby-Authorization': `MediaBrowser Token=${appState.token}, MediaBrowser Client="Home-Server", Device="YourDevice", DeviceId="home-lab-708", Version="1.0.0"`,
+    Authorization: authHeader(appState.token),
   }
 
   try {
